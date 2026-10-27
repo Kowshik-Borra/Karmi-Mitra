@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Send Details to Worker - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-container" style="max-width: 650px;">
+        <h3 class="text-center fw-bold mb-4 text-primary"><i class="fab fa-whatsapp me-2"></i>Send Customer Details to Worker</h3>
+
+        <div class="mb-3">
+            <label class="form-label fw-semibold">WhatsApp Message Preview:</label>
+            <textarea class="form-control" rows="10" readonly>{{ message_preview }}</textarea>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a href="{{ whatsapp_url }}" target="_blank" class="btn btn-success btn-lg fw-bold">
+                <i class="fab fa-whatsapp me-2"></i> Send via WhatsApp
+            </a>
+            <a href="{% url 'bookings:admin_dashboard' %}" class="btn btn-secondary fw-semibold">Back to Admin Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

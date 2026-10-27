@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Worker: {{ worker.name }} - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center fw-bold mb-4 text-primary">
+            <i class="fas fa-calendar-check me-2"></i>Booking Form for: {{ worker.name }}
+        </h2>
+        <p class="text-center text-muted mb-4">Category: <strong>{{ worker.category }}</strong> | City: <strong>{{ worker.city_name }}</strong></p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Customer Full Name</label>
+                {{ form.customer_name }}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Age</label>
+                    {{ form.customer_age }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Contact Phone Number</label>
+                    {{ form.customer_contact }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
+                {{ form.customer_email }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Full Address</label>
+                {{ form.customer_address }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Work Details  Description</label>
+                {{ form.work_details }}
+            </div>
+            <!-- HTML5 Geolocation Location Input Container -->
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Location (Google Maps Link)</label>
+                <div class="location-container">
+                    {{ form.location_url }}
+                    <button type="button" id="getLocationBtn" class="btn btn-outline-primary fw-semibold text-nowrap">
+                        <i class="fas fa-map-marked-alt me-1"></i> Detect Location
+                    </button>
+                </div>
+                <small class="text-muted">Click 'Detect Location' to automatically append your GPS coordinates map link.</small>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-lg fw-bold">Confirm  Create Booking</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('getLocationBtn').addEventListener('click', function() {
+    var locationInput = document.getElementById('customer_location');
+    if (navigator.geolocation) {
+        locationInput.value = "Fetching GPS location...";
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var locationURL = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+                locationInput.value = locationURL;
+            },
+            function(error) {
+                locationInput.value = "";
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("Location access denied! Please enable location permissions.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Location information is currently unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        alert("The request to get location timed out.");
+                        break;
+                    default:
+                        alert("An unknown error occurred while fetching location.");
+                }
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+});
+</script>
+{% endblock %}

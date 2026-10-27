@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0 text-primary"><i class="fas fa-chart-line me-2"></i>Admin Dashboard</h2>
+        <a href="{% url 'admin:index' %}" class="btn btn-dark fw-semibold" target="_blank">
+            <i class="fas fa-cogs me-1"></i> Django Admin Site
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-3">
+        <h4 class="fw-bold mb-3">Booking Information Overview</h4>
+
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Booking ID</th>
+                        <th>Worker</th>
+                        <th>Customer Name</th>
+                        <th>Customer Address</th>
+                        <th>Customer Contact</th>
+                        <th>Work Details</th>
+                        <th>Booking Date</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Send to Worker</th>
+                        <th>Send to Customer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                        <tr>
+                            <td>#{{ b.id }}</td>
+                            <td><a href="{% url 'workers:worker_detail' b.worker.id %}" class="fw-bold">{{ b.worker.name }}</a></td>
+                            <td>{{ b.customer_name }}</td>
+                            <td>{{ b.customer_address }}</td>
+                            <td>{{ b.customer_contact }}</td>
+                            <td>{{ b.work_details }}</td>
+                            <td>{{ b.booking_date|date:"Y-m-d H:i" }}</td>
+                            <td>
+                                {% if b.location_url %}
+                                    <a href="{{ b.location_url }}" target="_blank" class="btn btn-info btn-sm text-white">View</a>
+                                {% else %}
+                                    <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if b.status == 'Completed' %}
+                                    <span class="badge bg-success font-weight-bold">Completed</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark font-weight-bold">Processing</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'bookings:send_to_worker' b.id %}" class="btn btn-primary btn-sm fw-semibold">Send</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'bookings:send_to_customer' b.id %}" class="btn btn-success btn-sm fw-semibold">Send</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="11" class="text-muted py-4">No bookings found in database.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

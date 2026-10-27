@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ worker.name }} - Worker Profile - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-5 mb-4">
+            <div class="card border-0 shadow-sm p-4 text-center">
+                {% if worker.profile_image %}
+                    <img src="{{ worker.profile_image.url }}" class="rounded-circle mx-auto mb-3" style="width: 150px; height: 150px; object-fit: cover;" alt="{{ worker.name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/150" class="rounded-circle mx-auto mb-3" alt="{{ worker.name }}">
+                {% endif %}
+
+                <h3 class="fw-bold mb-1">{{ worker.name }}</h3>
+                <h5 class="text-primary fw-semibold mb-3">{{ worker.category }}</h5>
+
+                <div class="mb-3">
+                    {% if worker.availability == 'Yes' %}
+                        <span class="badge bg-success p-2 fs-6">Available for Work</span>
+                    {% else %}
+                        <span class="badge bg-danger p-2 fs-6">Currently Unavailable</span>
+                    {% endif %}
+                </div>
+
+                <div class="rating-stars fs-4 mb-3">
+                    <i class="fas fa-star text-warning"></i> {{ worker.rating|default:"0.0" }} / 5.0
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a href="{% url 'bookings:book_worker' worker.pk %}" class="btn btn-success btn-lg fw-bold">
+                        <i class="fas fa-calendar-check me-2"></i> Book Worker Now
+                    </a>
+                    <a href="tel:{{ worker.contact_number }}" class="btn btn-outline-primary fw-semibold">
+                        <i class="fas fa-phone me-2"></i> Call: {{ worker.contact_number }}
+                    </a>
+                    <a href="mailto:{{ worker.email }}" class="btn btn-outline-secondary fw-semibold">
+                        <i class="fas fa-envelope me-2"></i> Email Worker
+                    </a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'workers:toggle_availability' worker.pk %}" class="btn btn-warning btn-sm fw-semibold mt-2">
+                            Toggle Availability Status
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h4 class="fw-bold text-primary mb-3"><i class="fas fa-info-circle me-2"></i>Worker Details</h4>
+                
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr><th>Age</th><td>{{ worker.age }} years</td></tr>
+                        <tr><th>Gender</th><td>{{ worker.gender }}</td></tr>
+                        <tr><th>City</th><td>{{ worker.city_name }}</td></tr>
+                        <tr><th>Skill Type</th><td>{{ worker.skill_type }}</td></tr>
+                        <tr><th>Experience Level</th><td>{{ worker.experience_level }}</td></tr>
+                        <tr><th>Years of Experience</th><td>{{ worker.years_of_experience }} years</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Customer Reviews & Feedback -->
+            <div class="card border-0 shadow-sm p-4">
+                <h4 class="fw-bold text-primary mb-3"><i class="fas fa-comments me-2"></i>Customer Reviews</h4>
+                
+                {% for f in feedbacks %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0">{{ f.customer_name }}</h6>
+                            <span class="text-warning font-weight-bold">⭐ {{ f.rating }}/5</span>
+                        </div>
+                        <p class="text-muted mb-1">{{ f.comments|default:"No written comments provided." }}</p>
+                        <small class="text-muted"><i class="far fa-clock me-1"></i>{{ f.created_at|date:"M d, Y" }}</small>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No customer reviews yet for this worker.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

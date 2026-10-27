@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Worker Registration Form - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center fw-bold mb-4 text-primary"><i class="fas fa-id-card me-2"></i>Worker Registration Form</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Full Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors }}</div>{% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Age</label>
+                    {{ form.age }}
+                    {% if form.age.errors %}<div class="text-danger small mt-1">{{ form.age.errors }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Gender</label>
+                    {{ form.gender }}
+                    {% if form.gender.errors %}<div class="text-danger small mt-1">{{ form.gender.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Work Category</label>
+                {{ form.category }}
+                {% if form.category.errors %}<div class="text-danger small mt-1">{{ form.category.errors }}</div>{% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Contact Number</label>
+                    {{ form.contact_number }}
+                    {% if form.contact_number.errors %}<div class="text-danger small mt-1">{{ form.contact_number.errors }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">City Name</label>
+                {{ form.city_name }}
+                {% if form.city_name.errors %}<div class="text-danger small mt-1">{{ form.city_name.errors }}</div>{% endif %}
+            </div>
+
+            <h5 class="fw-bold mt-4 mb-3 text-secondary"><i class="fas fa-award me-2"></i>Skills & Experience</h5>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Skill Type</label>
+                {{ form.skill_type }}
+                {% if form.skill_type.errors %}<div class="text-danger small mt-1">{{ form.skill_type.errors }}</div>{% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Experience Level</label>
+                    {{ form.experience_level }}
+                    {% if form.experience_level.errors %}<div class="text-danger small mt-1">{{ form.experience_level.errors }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Years of Experience</label>
+                    {{ form.years_of_experience }}
+                    {% if form.years_of_experience.errors %}<div class="text-danger small mt-1">{{ form.years_of_experience.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Profile Photo (Optional)</label>
+                {{ form.profile_image }}
+                {% if form.profile_image.errors %}<div class="text-danger small mt-1">{{ form.profile_image.errors }}</div>{% endif %}
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold">Register as Worker</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

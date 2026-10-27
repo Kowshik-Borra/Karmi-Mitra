@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Worker Directory - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <div>
+            <h2 class="fw-bold mb-1">Worker Directory</h2>
+            <p class="text-muted">Total workers found: {{ worker_count }}</p>
+        </div>
+
+        <form action="{% url 'workers:worker_list' %}" method="GET" class="d-flex align-items-center gap-2">
+            {% if category %}
+                <input type="hidden" name="category" value="{{ category }}">
+            {% endif %}
+            <input type="text" name="search" value="{{ city_search }}" class="form-control" placeholder="Search by city...">
+            <button type="submit" class="btn btn-primary fw-semibold">Search</button>
+        </form>
+    </div>
+
+    <div class="row g-4">
+        {% for worker in workers %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card worker-card h-100 p-3">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        {% if worker.profile_image %}
+                            <img src="{{ worker.profile_image.url }}" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" alt="{{ worker.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/80" class="rounded-circle" alt="{{ worker.name }}">
+                        {% endif %}
+                        <div>
+                            <h5 class="fw-bold mb-1">{{ worker.name }}</h5>
+                            <span class="badge bg-primary">{{ worker.category }}</span>
+                        </div>
+                    </div>
+
+                    <p class="mb-1"><strong>City:</strong> {{ worker.city_name }}</p>
+                    <p class="mb-1"><strong>Skill:</strong> {{ worker.skill_type }}</p>
+                    <p class="mb-1"><strong>Experience:</strong> {{ worker.years_of_experience }} yrs ({{ worker.experience_level }})</p>
+                    <p class="mb-2"><strong>Rating:</strong> ⭐ {{ worker.rating|default:"0.0" }} / 5.0</p>
+
+                    <div class="mt-auto d-flex gap-2">
+                        <a href="{% url 'workers:worker_detail' worker.pk %}" class="btn btn-outline-primary btn-sm w-50">Profile</a>
+                        <a href="{% url 'bookings:book_worker' worker.pk %}" class="btn btn-success btn-sm w-50">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No workers match your filter criteria.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

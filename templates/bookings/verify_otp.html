@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify OTP - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="form-container text-center" style="max-width: 500px;">
+        <h2 class="fw-bold mb-3 text-primary"><i class="fas fa-shield-alt me-2"></i>Work Completion OTP Verification</h2>
+        <p class="text-muted mb-4">Please enter the 6-digit OTP provided by the customer upon completion of the work.</p>
+
+        {% if booking %}
+            <div class="card p-3 mb-3 text-start bg-light">
+                <small class="text-muted">Booking #{{ booking.id }}</small>
+                <strong>Customer: {{ booking.customer_name }}</strong>
+                <small>Worker: {{ booking.worker.name }}</small>
+            </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.booking_id }}
+            {{ form.worker_id }}
+
+            <div class="mb-4">
+                {{ form.otp }}
+                {% if form.otp.errors %}
+                    <div class="text-danger small mt-2">{{ form.otp.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold">Verify  Complete Work</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

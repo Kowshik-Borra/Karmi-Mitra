@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Registration - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center fw-bold mb-4 text-primary"><i class="fas fa-user-check me-2"></i>Customer Signup</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">First Name</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Last Name</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Phone Number</label>
+                {{ form.phone_no }}
+                {% if form.phone_no.errors %}<div class="text-danger small mt-1">{{ form.phone_no.errors }}</div>{% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Password</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Confirm Password</label>
+                    {{ form.confirm_password }}
+                    {% if form.confirm_password.errors %}<div class="text-danger small mt-1">{{ form.confirm_password.errors }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-success btn-lg fw-bold">Register Account</button>
+            </div>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center mb-0">Already have an account? <a href="{% url 'accounts:login' %}" class="fw-bold text-primary">Login Here</a></p>
+    </div>
+</div>
+{% endblock %}

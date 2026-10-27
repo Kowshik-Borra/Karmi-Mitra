@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer Login - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center fw-bold mb-4 text-primary"><i class="fas fa-sign-in-alt me-2"></i>Customer Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_email" class="form-label fw-semibold">Email Address</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="id_password" class="form-label fw-semibold">Password</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold">Login</button>
+            </div>
+        </form>
+
+        <hr class="my-4">
+        <p class="text-center mb-0">Don't have an account? <a href="{% url 'accounts:register' %}" class="fw-bold text-primary">Register Here</a></p>
+    </div>
+</div>
+{% endblock %}

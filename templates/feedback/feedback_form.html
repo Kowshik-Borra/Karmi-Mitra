@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Worker Feedback Form - KARMI MITRA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="form-container" style="max-width: 550px;">
+        <h3 class="text-center fw-bold mb-3 text-primary"><i class="fas fa-star me-2"></i>Feedback for {{ worker.name }}</h3>
+        <p class="text-center text-muted mb-4">Category: <strong>{{ worker.category }}</strong></p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Your Name</label>
+                {{ form.customer_name }}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Rating (1 to 5 Stars)</label>
+                {{ form.rating }}
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold">Comments & Detailed Review</label>
+                {{ form.comments }}
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg fw-bold">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

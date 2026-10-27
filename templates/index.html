@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}KARMI MITRA - Find & Book Local Workers{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <aside class="col-md-3 col-lg-2 sidebar p-3">
+            <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-th-list me-2"></i>Categories</h5>
+
+            <div class="list-group list-group-flush mb-3">
+                <a href="{% url 'index' %}" class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %} fw-semibold">
+                    <i class="fas fa-border-all me-2"></i> All Workers
+                </a>
+            </div>
+
+            {% for cat in all_categories %}
+                <a href="{% url 'index' %}?category={{ cat }}" class="btn btn-outline-primary btn-sm w-100 subcategory-btn mb-1 text-truncate {% if selected_category == cat %}active{% endif %}">
+                    <i class="fas fa-tools me-1"></i> {{ cat }}
+                </a>
+            {% endfor %}
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="col-md-9 col-lg-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        {% if selected_category %}
+                            Workers in <span class="text-primary">{{ selected_category }}</span> Category
+                        {% else %}
+                            Available Service Workers
+                        {% endif %}
+                    </h2>
+                    <p class="text-muted mb-0">Showing {{ workers.count }} registered worker profile(s)</p>
+                </div>
+
+                <div class="d-flex align-items-center gap-2 mt-2 mt-sm-0">
+                    <a href="{% url 'workers:worker_register' %}" class="btn btn-primary fw-semibold">
+                        <i class="fas fa-user-plus me-1"></i> Join as Worker
+                    </a>
+                </div>
+            </div>
+
+            <!-- Worker Directory Cards Grid -->
+            <div class="row g-4">
+                {% for worker in workers %}
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="card worker-card h-100">
+                            {% if worker.profile_image %}
+                                <img src="{{ worker.profile_image.url }}" class="worker-img" alt="{{ worker.name }}">
+                            {% else %}
+                                <img src="https://via.placeholder.com/300x200?text=Karmi+Mitra+Worker" class="worker-img" alt="{{ worker.name }}">
+                            {% endif %}
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title fw-bold mb-0 text-dark">{{ worker.name }}</h5>
+                                    {% if worker.availability == 'Yes' %}
+                                        <span class="badge badge-availability-yes">Available</span>
+                                    {% else %}
+                                        <span class="badge badge-availability-no">Busy</span>
+                                    {% endif %}
+                                </div>
+
+                                <p class="text-primary fw-bold mb-2"><i class="fas fa-briefcase me-1"></i> {{ worker.category }}</p>
+                                
+                                <p class="text-muted small mb-1"><i class="fas fa-map-marker-alt me-1"></i> <strong>City:</strong> {{ worker.city_name }}</p>
+                                <p class="text-muted small mb-1"><i class="fas fa-layer-group me-1"></i> <strong>Skill:</strong> {{ worker.skill_type }}</p>
+                                <p class="text-muted small mb-1"><i class="fas fa-clock me-1"></i> <strong>Exp:</strong> {{ worker.years_of_experience }} yrs ({{ worker.experience_level }})</p>
+                                
+                                <div class="mt-2 mb-3">
+                                    <span class="rating-stars"><i class="fas fa-star"></i> {{ worker.rating|default:"0.0" }} / 5.0</span>
+                                </div>
+
+                                <div class="mt-auto d-grid gap-2">
+                                    <a href="{% url 'workers:worker_detail' worker.pk %}" class="btn btn-outline-primary btn-sm fw-semibold">
+                                        <i class="fas fa-eye me-1"></i> View Profile
+                                    </a>
+                                    <a href="{% url 'bookings:book_worker' worker.pk %}" class="btn btn-success btn-sm fw-semibold">
+                                        <i class="fas fa-calendar-check me-1"></i> Book Worker
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="p-5 bg-white rounded-3 shadow-sm">
+                            <i class="fas fa-user-slash fa-3x text-muted mb-3"></i>
+                            <h4>No Workers Found</h4>
+                            <p class="text-muted">There are currently no workers registered for this category or search criteria.</p>
+                            <a href="{% url 'index' %}" class="btn btn-primary fw-semibold mt-2">Reset Filters</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
